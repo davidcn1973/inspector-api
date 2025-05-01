@@ -1,0 +1,5 @@
+fastapi
+openai
+ultralytics
+python-dotenv
+pillow
