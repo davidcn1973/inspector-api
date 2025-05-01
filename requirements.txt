@@ -2,5 +2,5 @@ fastapi
 uvicorn
 openai
 ultralytics
-python-dotenv
 pillow
+python-dotenv
