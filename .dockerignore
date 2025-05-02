@@ -1,0 +1,14 @@
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.log
+*.env
+.env.*
+*.db
+.DS_Store
+.vscode/
+.idea/
+*.zip
+node_modules/
+model/best.pt
