@@ -3,10 +3,12 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from ultralytics import YOLO
 from utils.report_gen import generar_informe
+import os
+import gdown
 
 app = FastAPI()
 
-# Permitir CORS desde cualquier origen
+# CORS
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -15,9 +17,18 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Carga del modelo YOLO con manejo de errores
+# Descargar el modelo desde Google Drive si no existe
+model_path = "model/best.pt"
+drive_id = "1HWwWKpr8vK-92ArBIy83YcatO97H1RpB"  # <-- REEMPLAZAR POR TU ID DE DRIVE
+
+if not os.path.exists(model_path):
+    os.makedirs("model", exist_ok=True)
+    print("📥 Descargando modelo desde Google Drive...")
+    gdown.download(f"https://drive.google.com/uc?id={drive_id}", model_path, quiet=False)
+
+# Cargar modelo YOLO
 try:
-    model = YOLO("model/best.pt")
+    model = YOLO(model_path)
 except Exception as e:
     print(f"❌ Error al cargar el modelo: {e}")
     model = None
