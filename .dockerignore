@@ -11,4 +11,3 @@ __pycache__/
 .idea/
 *.zip
 node_modules/
-model/best.pt
