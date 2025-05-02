@@ -6,7 +6,7 @@ from utils.report_gen import generar_informe
 
 app = FastAPI()
 
-# Permitir CORS desde cualquier origen (ideal para testing)
+# Permitir CORS desde cualquier origen
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -15,8 +15,12 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Carga del modelo YOLO
-model = YOLO("model/best.pt")
+# Carga del modelo YOLO con manejo de errores
+try:
+    model = YOLO("model/best.pt")
+except Exception as e:
+    print(f"❌ Error al cargar el modelo: {e}")
+    model = None
 
 @app.get("/")
 def root():
@@ -25,6 +29,9 @@ def root():
 @app.post("/inspeccionar")
 async def inspeccionar(file: UploadFile = File(...)):
     try:
+        if model is None:
+            raise HTTPException(status_code=500, detail="Modelo no cargado.")
+
         results = model.predict(file.file)
 
         detecciones = []
